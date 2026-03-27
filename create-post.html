@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Makale Oluştur</title>
+    <!-- DaisyUI -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  </head>
+ <body class="bg-slate-500 text-white min-h-screen flex flex-col">
+
+
+  <nav class="flex justify-between items-center p-4 border-b border-slate-400">
+    <h1 class="text-2xl font-bold">Makale Ekle</h1>
+    <button class="btn btn-ghost text-white" onclick="handleLogout()">Çıkış yap</button>
+  </nav>
+
+
+  <main class="flex flex-1 items-center justify-center">
+
+    <div class="card w-full max-w-lg bg-slate-800 shadow-xl p-6 space-y-5">
+
+      <h2 class="text-xl font-semibold text-center">
+        Yeni Makale Oluştur
+      </h2>
+
+      <input
+        class="input input-bordered w-full bg-slate-700 text-white"
+        placeholder="Başlık"
+        id="title"
+      />
+
+      <textarea
+        class="textarea textarea-bordered w-full bg-slate-700 text-white"
+        placeholder="İçerik"
+        id="body"
+      ></textarea>
+
+      <select
+        class="select select-bordered w-full bg-slate-700 text-white"
+        id="category"
+      >
+        <option value="" disabled selected>Kategori Seç</option>
+        <option value="Frontend">Frontend</option>
+        <option value="Backend">Backend</option>
+        <option value="DevOps">DevOps</option>
+      </select>
+
+      <button
+        class="btn bg-gradient-to-r from-purple-600 to-indigo-600 border-none text-white"
+        onclick="save()"
+      >
+        Kaydet
+      </button>
+
+    </div>
+
+  </main>
+
+</body>
+    <!-- Footer -->
+
+    <script>
+      const API_URL = "https://api.zaferayan.com";
+      const ENDPOINT = "/posts";
+
+      const inputTitle = document.getElementById("title");
+      const inputBody = document.getElementById("body");
+      const inputCategory = document.getElementById("category");
+
+      <!--Token Kontrolü-->
+      const token = localStorage.getItem("token");
+      if (!token) {
+        window.location.href = "login.html";
+      }
+
+      function save() {
+        const title = inputTitle.value;
+        const body = inputBody.value;
+        const category = inputCategory.value;
+
+        axios
+          .post(
+            API_URL + ENDPOINT,
+            { title, body, category },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          )
+          .then((res) => {
+            window.location.href = "articles.html";
+          });
+      }
+
+      const handleLogout = () => {
+  localStorage.clear();
+  window.location.href = 'login.html';
+};
+
+    </script>
+  </body>
+</html>
